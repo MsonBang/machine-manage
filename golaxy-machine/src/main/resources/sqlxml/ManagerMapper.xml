@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golaxy.machine.miaoshao.mapper.ManagerMapper">
+
+    <!--标签列表查询-->
+    <select id="getUserInfo" parameterType="java.lang.String" resultType="com.golaxy.machine.miaoshao.common.entity.UserInfo">
+        SELECT u.id,u.username,u.nickname,u.isadmin
+        FROM t_user u
+        WHERE u.username=#{username} and u.delflag='0';
+    </select>
+
+    <!--新增标签-->
+    <!--<insert id="addUser" parameterType="com.golaxy.machine.miaoshao.common.entity.UserInfo">
+        insert into t_label_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null and id !=''" >
+                id,
+            </if>
+            <if test="username != null and username !=''" >
+                username,
+            </if>
+            <if test="password != null and password !=''" >
+                password,
+            </if>
+            <if test="nickname != null and nickname !=''" >
+                nickname,
+            </if>
+            <if test="isadmin != null and isadmin !=''">
+                isadmin,
+            </if>
+            <if test="createtime != null" >
+                createtime
+            </if>
+            <if test="createuser != null" >
+                createuser
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null and id !=''" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null and parentId !=''" >
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="label != null and label !=''" >
+                #{label,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null and orderNum !=''" >
+                #{orderNum,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null and createUser !=''" >
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null and updateUser !=''" >
+                #{updateUser,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>-->
+
+    <!--更新标签-->
+    <!--<update id="editLabel" parameterType="java.util.Map">
+        update T_LABEL_INFO
+        <set>
+            <if test="parentId != null and parentId !=''" >
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="label != null and label !=''" >
+                label = #{label,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null and orderNum !=''" >
+                orderby = #{orderNum,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null and updateUser !=''" >
+                update_user = #{updateUser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>-->
+
+    <!--删除标签-->
+    <!--<update id="delLabel" parameterType="java.lang.String">
+        update T_LABEL_INFO
+        <set>
+            del_flag = '1'
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>-->
+
+
+</mapper>
