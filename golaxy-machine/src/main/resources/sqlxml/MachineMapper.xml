@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golaxy.machine.mapper.MachineMapper">
+
+    <!--根据主键ID查询服务器详情信息-->
+    <select id="findOneById" parameterType="java.lang.String" resultType="com.golaxy.machine.common.entity.ServerInfo">
+        SELECT *
+        FROM sys_server s
+        WHERE s.id = #{id}
+    </select>
+
+    <!--按照条件查询服务器列表-->
+    <select id="queryList" parameterType="java.util.Map" resultType="com.golaxy.machine.common.entity.ServerInfo">
+        SELECT *
+        FROM sys_server
+        <where>
+            1=1
+            <if test="servername != null and servername !=''" >
+                and servername = #{servername},
+            </if>
+            <if test="serverip != null and serverip !=''" >
+                and serverip = #{serverip},
+            </if>
+            <if test="usetype != null and usetype !=''" >
+                and usetype = #{usetype},
+            </if>
+            <if test="isused != null and isused !=''" >
+                and isused = #{}isused
+            </if>
+            and delflag = 0
+        </where>
+    </select>
+
+    <!--新增服务器信息-->
+    <insert id="insertServer" parameterType="java.util.Map">
+        insert into sys_server
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null and id !=''" >
+                id,
+            </if>
+            <if test="servername != null and servername !=''" >
+                servername,
+            </if>
+            <if test="serverip != null and serverip !=''" >
+                serverip,
+            </if>
+            <if test="memory != null and memory !=''" >
+                nickname,
+            </if>
+            <if test="gpu != null and gpu !=''">
+                isadmin,
+            </if>
+            <if test="store != null and store !=''">
+                store,
+            </if>
+            <if test="usetype != null">
+                usetype,
+            </if>
+            <if test="isused != null">
+                isadmin,
+            </if>
+            <if test="createtime != null" >
+                createtime
+            </if>
+            <if test="createuser != null and createuser !=''" >
+                createuser
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null and id !=''" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="servername != null and servername !=''" >
+                #{servername,jdbcType=VARCHAR},
+            </if>
+            <if test="serverip != null and serverip !=''" >
+                #{serverip,jdbcType=VARCHAR},
+            </if>
+            <if test="memory != null and memory !=''">
+                #{memory,jdbcType=VARCHAR},
+            </if>
+            <if test="gpu != null and gpu !=''">
+                #{gpu,jdbcType=VARCHAR},
+            </if>
+            <if test="store != null and store !=''">
+                #{store,jdbcType=VARCHAR},
+            </if>
+            <if test="usetype != null">
+                #{usetype,jdbcType=INTEGER},
+            </if>
+            <if test="isused != null">
+                #{isused,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createuser != null and createuser !=''" >
+                #{createuser,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新标签-->
+    <update id="updateServer" parameterType="java.util.Map">
+        update sys_server
+        <set>
+            <if test="servername != null and servername !=''">
+                servername = #{servername,jdbcType=VARCHAR},
+            </if>
+            <if test="serverip != null and serverip !=''">
+                serverip = #{serverip,jdbcType=VARCHAR},
+            </if>
+            <if test="memory != null and memory !=''">
+                memory = #{memory,jdbcType=VARCHAR},
+            </if>
+            <if test="gpu != null and gpu !=''">
+                gpu = #{gpu,jdbcType=VARCHAR},
+            </if>
+            <if test="store != null and store !=''">
+                store = #{store,jdbcType=VARCHAR},
+            </if>
+            <if test="usetype != null">
+                usetype = #{usetype,jdbcType=INTEGER},
+            </if>
+            <if test="isused != null">
+                isused = #{isused,jdbcType=INTEGER},
+            </if>
+            <if test="updatetime != null">
+                updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateuser != null and updateuser !=''">
+                #{updateuser,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--批量删除服务器信息-->
+    <update id="batchDelServer" parameterType="java.util.List">
+        update sys_server
+        set delflag = 1
+        where id in
+        <foreach collection="array" item="arr" index="no" open="("
+                 separator="," close=")">
+            #{arr}
+        </foreach>
+    </update>
+
+</mapper>

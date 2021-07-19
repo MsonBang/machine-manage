@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.golaxy.machine.miaoshao.mapper.ManagerMapper">
+<mapper namespace="com.golaxy.machine.mapper.ManagerMapper">
 
-    <!--标签列表查询-->
-    <select id="getUserInfo" parameterType="java.lang.String" resultType="com.golaxy.machine.miaoshao.common.entity.UserInfo">
+    <!--根据用户名-->
+    <select id="getUserInfo" parameterType="java.lang.String" resultType="com.golaxy.machine.common.entity.UserInfo">
         SELECT u.id,u.username,u.nickname,u.isadmin
         FROM t_user u
-        WHERE u.username=#{username} and u.delflag='0';
+        WHERE u.username=#{username} and u.delflag='0'
     </select>
 
     <!--新增标签-->
-    <!--<insert id="addUser" parameterType="com.golaxy.machine.miaoshao.common.entity.UserInfo">
-        insert into t_label_info
+    <insert id="insert" parameterType="com.golaxy.machine.common.entity.UserInfo">
+        insert into t_user
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null and id !=''" >
                 id,
@@ -31,7 +31,7 @@
             <if test="createtime != null" >
                 createtime
             </if>
-            <if test="createuser != null" >
+            <if test="createuser != null and createuser !=''" >
                 createuser
             </if>
         </trim>
@@ -39,29 +39,23 @@
             <if test="id != null and id !=''" >
                 #{id,jdbcType=VARCHAR},
             </if>
-            <if test="parentId != null and parentId !=''" >
-                #{parentId,jdbcType=VARCHAR},
+            <if test="password != null and password !=''" >
+                #{password,jdbcType=VARCHAR},
             </if>
-            <if test="label != null and label !=''" >
-                #{label,jdbcType=VARCHAR},
+            <if test="nickname != null and nickname !=''" >
+                #{nickname,jdbcType=VARCHAR},
             </if>
-            <if test="orderNum != null and orderNum !=''" >
-                #{orderNum,jdbcType=INTEGER},
+            <if test="isadmin != null and isadmin !=''">
+                #{isadmin,jdbcType=VARCHAR},
             </if>
-            <if test="createTime != null" >
-                #{createTime,jdbcType=TIMESTAMP},
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
             </if>
-            <if test="createUser != null and createUser !=''" >
-                #{createUser,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null" >
-                #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateUser != null and updateUser !=''" >
-                #{updateUser,jdbcType=VARCHAR}
+            <if test="createuser != null and createuser !=''" >
+                #{createuser,jdbcType=VARCHAR}
             </if>
         </trim>
-    </insert>-->
+    </insert>
 
     <!--更新标签-->
     <!--<update id="editLabel" parameterType="java.util.Map">
