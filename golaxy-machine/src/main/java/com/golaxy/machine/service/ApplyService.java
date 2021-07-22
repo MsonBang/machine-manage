@@ -2,6 +2,7 @@ package com.golaxy.machine.service;
 
 import com.golaxy.machine.common.entity.ServerApplyInfo;
 import com.golaxy.machine.util.JsonResult;
+import com.golaxy.machine.util.pagehelper.PageResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface ApplyService {
     * @Author: miaoxuebing
     * @Date: 2021/7/21 下午4:00
     **/
-    JsonResult<List<ServerApplyInfo>> queryList(Map<String, Object> map);
+    JsonResult<PageResult> queryList(Map<String, Object> map);
 
     /**
     * @Description: 新增申请记录接口定义

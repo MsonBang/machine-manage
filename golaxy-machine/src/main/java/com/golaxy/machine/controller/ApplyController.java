@@ -4,6 +4,7 @@ import com.golaxy.machine.common.entity.ServerApplyInfo;
 import com.golaxy.machine.common.entity.ServerInfo;
 import com.golaxy.machine.service.ApplyService;
 import com.golaxy.machine.util.JsonResult;
+import com.golaxy.machine.util.pagehelper.PageResult;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +46,10 @@ public class ApplyController {
             @ApiImplicitParam(paramType = "query", name = "applyuser", value = "申请人姓名", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "applyorg", value = "申请人所在部门", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "uptime", value = "提交时间", dataType = "date"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", value = "当前页码", dataType = "int"),
+            @ApiImplicitParam(paramType = "query", name = "pageNum", value = "当前页码", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页数量", dataType = "int")
     })
-    public JsonResult<List<ServerApplyInfo>> queryList(@RequestBody Map<String, Object> map) {
+    public JsonResult<PageResult> queryList(@RequestBody Map<String, Object> map) {
         try {
             return applyService.queryList(map);
         } catch (Exception e) {

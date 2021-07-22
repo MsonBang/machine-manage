@@ -3,6 +3,7 @@ package com.golaxy.machine.controller;
 import com.golaxy.machine.common.entity.ServerInfo;
 import com.golaxy.machine.service.MachineService;
 import com.golaxy.machine.util.JsonResult;
+import com.golaxy.machine.util.pagehelper.PageResult;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +39,10 @@ public class MachineController {
             @ApiImplicitParam(paramType = "query", name = "serverip", value = "服务器ip", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "usetype", value = "服务器用途[0数据库1算法2应用程序3综合混合4其他]", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "isused", value = "是否允许申请[0否1是]", dataType = "int"),
-            @ApiImplicitParam(paramType = "query", name = "pageNo", value = "当前页码", dataType = "int"),
+            @ApiImplicitParam(paramType = "query", name = "pageNum", value = "当前页码", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "pageSize", value = "每页数量", dataType = "int")
     })
-    public JsonResult<List<ServerInfo>> queryList(@RequestBody Map<String, Object> map) {
+    public JsonResult<PageResult> queryList(@RequestBody Map<String, Object> map) {
         try {
             return machineService.queryList(map);
         } catch (Exception e) {

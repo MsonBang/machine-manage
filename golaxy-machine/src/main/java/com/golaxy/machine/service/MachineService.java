@@ -2,6 +2,7 @@ package com.golaxy.machine.service;
 
 import com.golaxy.machine.common.entity.ServerInfo;
 import com.golaxy.machine.util.JsonResult;
+import com.golaxy.machine.util.pagehelper.PageResult;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface MachineService {
     * @Author: miaoxuebing
     * @Date: 2021/7/19 下午3:45
     **/
-    JsonResult<List<ServerInfo>> queryList(Map<String, Object> map);
+    JsonResult<PageResult> queryList(Map<String, Object> map);
 
     /**
      * @Description: 新增服务器信息接口定义

@@ -42,10 +42,10 @@ public class UserInfo {
     private String createuser;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(name = "updatetime", value = "创建时间", dataType = "date")
+    @ApiModelProperty(name = "updatetime", value = "修改时间", dataType = "date")
     private Date updatetime;
 
-    @ApiModelProperty(name = "updateuser", value = "创建人", dataType = "string")
+    @ApiModelProperty(name = "updateuser", value = "修改人", dataType = "string")
     private String updateuser;
 
     @ApiModelProperty(name = "delflag", value = "删除标志[0否1是]", dataType = "int")

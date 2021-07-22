@@ -9,9 +9,24 @@
         WHERE u.username=#{username} and u.delflag='0'
     </select>
 
+    <!--条件查询用户信息列表-->
+    <select id="queryList" parameterType="java.util.Map" resultType="com.golaxy.machine.common.entity.UserInfo">
+        select * from sys_user
+        <where>
+            1=1
+            <if test="username != null and username !=''" >
+                and username = #{username},
+            </if>
+            <if test="nickname != null and nickname !=''" >
+                and nickname = #{nickname},
+            </if>
+            and delflag = 0
+        </where>
+    </select>
+
     <!--新增标签-->
     <insert id="insert" parameterType="com.golaxy.machine.common.entity.UserInfo">
-        insert into t_user
+        insert into sys_user
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null and id !=''" >
                 id,
@@ -58,36 +73,40 @@
     </insert>
 
     <!--更新标签-->
-    <!--<update id="editLabel" parameterType="java.util.Map">
-        update T_LABEL_INFO
+    <update id="updateUser" parameterType="java.util.Map">
+        update sys_user
         <set>
-            <if test="parentId != null and parentId !=''" >
-                parent_id = #{parentId,jdbcType=VARCHAR},
+            <if test="username != null and username !=''" >
+                username = #{username,jdbcType=VARCHAR},
             </if>
-            <if test="label != null and label !=''" >
-                label = #{label,jdbcType=VARCHAR},
+            <if test="password != null and password !=''" >
+                password = #{password,jdbcType=VARCHAR},
             </if>
-            <if test="orderNum != null and orderNum !=''" >
-                orderby = #{orderNum,jdbcType=INTEGER},
+            <if test="nickname != null and nickname !=''" >
+                nickname = #{nickname,jdbcType=VARCHAR},
             </if>
-            <if test="updateTime != null" >
-                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            <if test="isadmin != null " >
+                isadmin = #{isadmin,jdbcType=INTEGER},
             </if>
-            <if test="updateUser != null and updateUser !=''" >
-                update_user = #{updateUser,jdbcType=VARCHAR},
+            <if test="updatetime != null" >
+                updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateuser != null and updateuser !=''" >
+                updateuser = #{updateuser,jdbcType=VARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}
-    </update>-->
+    </update>
 
-    <!--删除标签-->
-    <!--<update id="delLabel" parameterType="java.lang.String">
-        update T_LABEL_INFO
-        <set>
-            del_flag = '1'
-        </set>
-        where id = #{id,jdbcType=VARCHAR}
-    </update>-->
-
+    <!--批量删除用户信息-->
+    <update id="batchDelUser" parameterType="java.util.List">
+        update sys_user
+        set delflag = 1
+        where id in
+        <foreach collection="array" item="arr" index="no" open="("
+                 separator="," close=")">
+            #{arr}
+        </foreach>
+    </update>
 
 </mapper>

@@ -1,10 +1,14 @@
 package com.golaxy.machine.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.golaxy.machine.common.entity.ServerInfo;
 import com.golaxy.machine.mapper.MachineMapper;
 import com.golaxy.machine.service.MachineService;
 import com.golaxy.machine.util.JsonResult;
 import com.golaxy.machine.util.UtilsApi;
+import com.golaxy.machine.util.pagehelper.PageResult;
+import com.golaxy.machine.util.pagehelper.PageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +42,22 @@ public class MachineServiceImpl implements MachineService {
      * @Date: 2021/7/19 下午4:19
      **/
     @Override
-    public JsonResult<List<ServerInfo>> queryList(Map<String, Object> map) {
-        String pageNo = (String) map.get("pageNo");
-        String pagesize = (String) map.get("pageSize");
+    public JsonResult<PageResult> queryList(Map<String, Object> map) {
+        int pageNum = (int) map.get("pageNum");
+        int pageSize = (int) map.get("pageSize");
         //判断必填参数
-        if (UtilsApi.isNull(pageNo) || UtilsApi.isNull(pagesize)) {
+        if (UtilsApi.isNull(String.valueOf(pageNum)) || UtilsApi.isNull(String.valueOf(pageSize))) {
             logger.info("查询参数pageNo或pageSize缺失");
             return new JsonResult<>(JsonResult.FAIL, "查询参数缺失！请联系管理员");
         }
+        //mybatis分页
+        PageHelper.startPage(pageNum, pageSize);
+        //查询数据
         List<ServerInfo> queryList = machineMapper.queryList(map);
-
-        return new JsonResult<>(JsonResult.SUCCESS, "查询成功", queryList);
+        //封装分页数据结果
+        PageInfo<ServerInfo> pageInfo = new PageInfo<>(queryList);
+        //封装整体JsonResult返回结果
+        return new JsonResult<>(JsonResult.SUCCESS, "查询成功", PageUtil.getPageResult(pageInfo));
     }
 
 
