@@ -33,6 +33,9 @@ public class ServerApplyInfo {
     @ApiModelProperty(name = "applyorg", value = "申请人所在部门", dataType = "string")
     private String applyorg;
 
+    @ApiModelProperty(name = "upstatus", value = "提交状态[0未提交1已提交2已撤销]", dataType = "int")
+    private int upstatus;
+
     @ApiModelProperty(name = "uptime", value = "提交时间", dataType = "date")
     private Date uptime;
 
