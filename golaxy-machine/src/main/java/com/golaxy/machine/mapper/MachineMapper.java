@@ -53,6 +53,15 @@ public interface MachineMapper {
     ServerInfo findOneById(@Param("id") String id);
 
     /**
+    * @Description: 根据IP地址查询服务器信息
+    * @Params: [ip]
+    * @Return: com.golaxy.machine.common.entity.ServerInfo
+    * @Author: miaoxuebing
+    * @Date: 2021/8/2 下午3:34
+    **/
+    ServerInfo findOneByIp(@Param("ip") String ip);
+
+    /**
      * @Description: 批量删除服务器信息接口定义
      * @Params: [ids]
      * @Return: void

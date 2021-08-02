@@ -4,9 +4,15 @@
 
     <!--根据用户名-->
     <select id="getUserInfo" parameterType="java.lang.String" resultType="com.golaxy.machine.common.entity.UserInfo">
-        SELECT u.id,u.username,u.nickname,u.isadmin
-        FROM t_user u
+        SELECT *
+        FROM sys_user u
         WHERE u.username=#{username} and u.delflag='0'
+    </select>
+
+    <select id="getUserInfoById" parameterType="java.lang.String" resultType="com.golaxy.machine.common.entity.UserInfo">
+        SELECT *
+        FROM sys_user u
+        WHERE u.id=#{id} and u.delflag='0'
     </select>
 
     <!--条件查询用户信息列表-->
@@ -15,10 +21,10 @@
         <where>
             1=1
             <if test="username != null and username !=''" >
-                and username = #{username},
+                and username = #{username}
             </if>
             <if test="nickname != null and nickname !=''" >
-                and nickname = #{nickname},
+                and nickname = #{nickname}
             </if>
             and delflag = 0
         </where>
@@ -43,8 +49,11 @@
             <if test="isadmin != null and isadmin !=''">
                 isadmin,
             </if>
+            <if test="salt != null and salt !=''">
+                salt,
+            </if>
             <if test="createtime != null" >
-                createtime
+                createtime,
             </if>
             <if test="createuser != null and createuser !=''" >
                 createuser
@@ -54,6 +63,9 @@
             <if test="id != null and id !=''" >
                 #{id,jdbcType=VARCHAR},
             </if>
+            <if test="username != null and username !=''" >
+                #{username,jdbcType=VARCHAR},
+            </if>
             <if test="password != null and password !=''" >
                 #{password,jdbcType=VARCHAR},
             </if>
@@ -62,6 +74,9 @@
             </if>
             <if test="isadmin != null and isadmin !=''">
                 #{isadmin,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null and salt !=''">
+                #{salt,jdbcType=VARCHAR},
             </if>
             <if test="createtime != null" >
                 #{createtime,jdbcType=TIMESTAMP},
@@ -103,7 +118,7 @@
         update sys_user
         set delflag = 1
         where id in
-        <foreach collection="array" item="arr" index="no" open="("
+        <foreach collection="list" item="arr" index="no" open="("
                  separator="," close=")">
             #{arr}
         </foreach>

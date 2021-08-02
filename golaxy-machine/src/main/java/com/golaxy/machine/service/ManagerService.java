@@ -41,7 +41,7 @@ public interface ManagerService {
     * @Author: miaoxuebing
     * @Date: 2021/1/31 下午5:53
     **/
-    JsonResult<Integer> addUser(Map<String, Object> map);
+    JsonResult<UserInfo> addUser(Map<String, Object> map);
 
     /**
     * @Description: 编辑用户接口定义

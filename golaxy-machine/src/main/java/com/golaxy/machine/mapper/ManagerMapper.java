@@ -2,6 +2,7 @@ package com.golaxy.machine.mapper;
 
 import com.golaxy.machine.common.entity.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,15 @@ public interface ManagerMapper {
      * @Date: 2021/1/31 下午2:19
      **/
     UserInfo getUserInfo(String username);
+
+    /**
+     * @Description: 根据主键查询用户信息
+     * @Params: [id]
+     * @Return: com.golaxy.machine.common.entity.UserInfo
+     * @Author: miaoxuebing
+     * @Date: 2021/8/2 下午2:36
+     **/
+    UserInfo getUserInfoById(@Param("id") String id);
 
     /**
      * @Description: 查询用户信息列表mapper定义

@@ -32,6 +32,13 @@ public class MachineController {
     private MachineService machineService;
 
 
+    /**
+    * @Description: 服务器管理列表条件查询
+    * @Params: [map]
+    * @Return: com.golaxy.machine.util.JsonResult<com.golaxy.machine.util.pagehelper.PageResult>
+    * @Author: miaoxuebing
+    * @Date: 2021/7/26 下午3:37
+    **/
     @PostMapping("/list")
     @ApiOperation(value = "查询服务器列表信息接口", notes = "查询服务器列表信息接口")
     @ApiImplicitParams({
@@ -105,7 +112,7 @@ public class MachineController {
         try {
             return machineService.editServer(map);
         } catch (Exception e) {
-            logger.error("修改异常！请联系管理员", e.getMessage());
+            logger.error("修改异常！请联系管理员", e);
             return new JsonResult<>(JsonResult.FAIL, "修改异常！请联系管理员");
         }
     }

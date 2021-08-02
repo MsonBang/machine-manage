@@ -6,7 +6,14 @@
     <select id="findOneById" parameterType="java.lang.String" resultType="com.golaxy.machine.common.entity.ServerInfo">
         SELECT *
         FROM sys_server s
-        WHERE s.id = #{id}
+        WHERE s.id = #{id} and s.delflag = 0
+    </select>
+
+    <!--根据IP查询服务器信息-->
+    <select id="findOneByIp" parameterType="java.lang.String" resultType="com.golaxy.machine.common.entity.ServerInfo">
+        SELECT *
+        FROM sys_server s
+        WHERE s.serverip = #{ip} and s.delflag = 0
     </select>
 
     <!--按照条件查询服务器列表-->
@@ -15,17 +22,17 @@
         FROM sys_server
         <where>
             1=1
-            <if test="servername != null and servername !=''" >
-                and servername = #{servername},
+            <if test="servername != null and servername !=''">
+                and servername = #{servername}
             </if>
-            <if test="serverip != null and serverip !=''" >
-                and serverip = #{serverip},
+            <if test="serverip != null and serverip !=''">
+                and serverip = #{serverip}
             </if>
-            <if test="usetype != null and usetype !=''" >
-                and usetype = #{usetype},
+            <if test="usetype != null and usetype !=''">
+                and usetype = #{usetype}
             </if>
-            <if test="isused != null and isused !=''" >
-                and isused = #{}isused
+            <if test="isused != null and isused !=''">
+                and isused = #{isused}
             </if>
             and delflag = 0
         </where>
@@ -34,21 +41,21 @@
     <!--新增服务器信息-->
     <insert id="insertServer" parameterType="java.util.Map">
         insert into sys_server
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="id != null and id !=''" >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id !=''">
                 id,
             </if>
-            <if test="servername != null and servername !=''" >
+            <if test="servername != null and servername !=''">
                 servername,
             </if>
-            <if test="serverip != null and serverip !=''" >
+            <if test="serverip != null and serverip !=''">
                 serverip,
             </if>
-            <if test="memory != null and memory !=''" >
-                nickname,
+            <if test="memory != null and memory !=''">
+                memory,
             </if>
             <if test="gpu != null and gpu !=''">
-                isadmin,
+                gpu,
             </if>
             <if test="store != null and store !=''">
                 store,
@@ -57,23 +64,23 @@
                 usetype,
             </if>
             <if test="isused != null">
-                isadmin,
+                isused,
             </if>
-            <if test="createtime != null" >
-                createtime
+            <if test="createtime != null">
+                createtime,
             </if>
-            <if test="createuser != null and createuser !=''" >
+            <if test="createuser != null and createuser !=''">
                 createuser
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="id != null and id !=''" >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id !=''">
                 #{id,jdbcType=VARCHAR},
             </if>
-            <if test="servername != null and servername !=''" >
+            <if test="servername != null and servername !=''">
                 #{servername,jdbcType=VARCHAR},
             </if>
-            <if test="serverip != null and serverip !=''" >
+            <if test="serverip != null and serverip !=''">
                 #{serverip,jdbcType=VARCHAR},
             </if>
             <if test="memory != null and memory !=''">
@@ -91,10 +98,10 @@
             <if test="isused != null">
                 #{isused,jdbcType=INTEGER},
             </if>
-            <if test="createtime != null" >
+            <if test="createtime != null">
                 #{createtime,jdbcType=TIMESTAMP},
             </if>
-            <if test="createuser != null and createuser !=''" >
+            <if test="createuser != null and createuser !=''">
                 #{createuser,jdbcType=VARCHAR}
             </if>
         </trim>
@@ -129,7 +136,7 @@
                 updatetime = #{updatetime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateuser != null and updateuser !=''">
-                #{updateuser,jdbcType=VARCHAR}
+                updateuser = #{updateuser,jdbcType=VARCHAR}
             </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}
@@ -140,7 +147,7 @@
         update sys_server
         set delflag = 1
         where id in
-        <foreach collection="array" item="arr" index="no" open="("
+        <foreach collection="list" item="arr" index="no" open="("
                  separator="," close=")">
             #{arr}
         </foreach>

@@ -57,8 +57,10 @@ public class ManagerServiceImpl implements ManagerService {
             return new JsonResult<>(JsonResult.FAIL, "登录失败，用户不存在！");
         }
         //如果存在用户，则判断密码是否一致
+        System.out.println(DigestUtils.md5Hex(DigestUtils.md5Hex(password).concat(UtilsApi.toString(userInfo.getSalt()))));
+        System.out.println(UtilsApi.toString(password));
         if (!DigestUtils.md5Hex(DigestUtils.md5Hex(password).concat(UtilsApi.toString(userInfo.getSalt()))).
-                equals(UtilsApi.toString(password))) {
+                equals(UtilsApi.toString(userInfo.getPassword()))) {
             return new JsonResult<>(JsonResult.FAIL, "登录失败，密码错误！");
         }
         //如果通过检验，则算是登录成功，生成一个token
@@ -71,7 +73,7 @@ public class ManagerServiceImpl implements ManagerService {
             put("isAdmin", userInfo.getIsadmin());
         }};
         //放入Redis
-        redisUtil.set(userInfo.getId(), userInfo, 180);
+        //redisUtil.set(userInfo.getId(), userInfo, 180);
 
         return new JsonResult<>(JsonResult.SUCCESS, "登录成功", resultMap);
     }
@@ -89,7 +91,7 @@ public class ManagerServiceImpl implements ManagerService {
         int pageSize = (int) map.get("pageSize");
         //判断必填参数
         if (UtilsApi.isNull(String.valueOf(pageNum)) || UtilsApi.isNull(String.valueOf(pageSize))) {
-            logger.info("查询参数pageNo或pageSize缺失");
+            logger.info("查询参数pageNum或pageSize缺失");
             return new JsonResult<>(JsonResult.FAIL, "查询参数缺失！请联系管理员");
         }
         //mybatis分页
@@ -111,7 +113,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @Date: 2021/1/31 下午5:54
      **/
     @Override
-    public JsonResult<Integer> addUser(Map<String, Object> map) {
+    public JsonResult<UserInfo> addUser(Map<String, Object> map) {
         String username = (String) map.get("username");
         String nickname = (String) map.get("nickname");
         String password = (String) map.get("password");
@@ -140,17 +142,21 @@ public class ManagerServiceImpl implements ManagerService {
         String passwordN = DigestUtils.md5Hex(DigestUtils.md5Hex(repassword).concat(salt));
         UserInfo userInfo1 = new UserInfo();
         userInfo1.setId(userId);
+        userInfo1.setUsername(username);
+        userInfo1.setNickname(nickname);
         userInfo1.setPassword(passwordN);
         userInfo1.setCreatetime(new Date());
         userInfo1.setCreateuser((String) map.get("createuser"));
         userInfo1.setIsadmin("0");
+        userInfo1.setSalt(salt);
+        userInfo1.setDelflag("0");
         //开始插入数据库
         int i = managerMapper.insert(userInfo1);
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "添加失败");
         }
 
-        return new JsonResult<>(JsonResult.SUCCESS, "添加成功");
+        return new JsonResult<UserInfo>(JsonResult.SUCCESS, "添加成功", userInfo1);
     }
 
 
@@ -175,37 +181,50 @@ public class ManagerServiceImpl implements ManagerService {
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "修改失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "修改成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "修改成功", i);
     }
 
 
     /**
-    * @Description: 修改用户密码方法实现
-    * @Params: [map]
-    * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
-    * @Author: miaoxuebing
-    * @Date: 2021/7/22 下午2:22
-    **/
+     * @Description: 修改用户密码方法实现
+     * @Params: [map]
+     * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+     * @Author: miaoxuebing
+     * @Date: 2021/7/22 下午2:22
+     **/
     @Override
     public JsonResult<Integer> editUserPwd(Map<String, Object> map) {
+        //获取参数
         String id = (String) map.get("id");
-        String passWord = (String) map.get("password");
-        if(UtilsApi.isNull(id)){
+        String password = (String) map.get("password");
+        String repassword = (String) map.get("repassword");
+        //判断参数必填，判断两次密码是否一致
+        if (UtilsApi.isNull(id)) {
             logger.info("参数为空，人员主键ID必填！");
             return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
         }
-        if(UtilsApi.isNull(passWord)){
+        if (UtilsApi.isNull(password)) {
             logger.info("参数为空，修改密码参数必填！");
             return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
         }
+        if (!password.equals(repassword)) {
+            return new JsonResult<>(JsonResult.FAIL, "修改失败，两次密码不一致");
+        }
+        //首先查询该用户是否存在
+        UserInfo userInfo = managerMapper.getUserInfoById(id);
+        if (userInfo == null) {
+            return new JsonResult<>(JsonResult.FAIL, "修改失败，账号不存在");
+        }
+        String passwordN = DigestUtils.md5Hex(DigestUtils.md5Hex(password).concat(userInfo.getSalt()));
         //添加更新时间
         map.put("updatetime", new Date());
+        map.put("password", passwordN);
         //开始修改记录
         int i = managerMapper.updateUser(map);
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "修改失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "修改成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "修改成功", i);
     }
 
 
@@ -228,6 +247,6 @@ public class ManagerServiceImpl implements ManagerService {
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "删除失败失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "删除成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "删除成功", i);
     }
 }

@@ -1,8 +1,8 @@
 package com.golaxy.machine.controller;
 
-import com.golaxy.machine.util.JsonResult;
-import com.golaxy.machine.service.ManagerService;
 import com.golaxy.machine.common.entity.UserInfo;
+import com.golaxy.machine.service.ManagerService;
+import com.golaxy.machine.util.JsonResult;
 import com.golaxy.machine.util.pagehelper.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -11,7 +11,10 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +54,7 @@ public class ManagerController {
             //查询字段转化为map集合
             return managerService.login(map);
         } catch (Exception e) {
-            logger.error("登录异常！请联系管理员", e.getMessage());
+            logger.error("登录异常！请联系管理员", e);
             return new JsonResult<>(JsonResult.FAIL, "登录异常！请联系管理员");
         }
     }
@@ -77,8 +80,8 @@ public class ManagerController {
             //查询字段转化为map集合
             return managerService.queryList(map);
         } catch (Exception e) {
-            logger.error("添加异常！请联系管理员", e.getMessage());
-            return new JsonResult<>(JsonResult.FAIL, "添加异常！请联系管理员");
+            logger.error("查询异常！请联系管理员", e);
+            return new JsonResult<>(JsonResult.FAIL, "查询异常！请联系管理员");
         }
     }
 
@@ -99,12 +102,12 @@ public class ManagerController {
             @ApiImplicitParam(paramType = "query", name = "nickname", value = "用户姓名", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "createuser", value = "创建人", dataType = "String")
     })
-    public JsonResult<Integer> addUser(@RequestBody Map<String, Object> map) {
+    public JsonResult<UserInfo> addUser(@RequestBody Map<String, Object> map) {
         try {
             //查询字段转化为map集合
             return managerService.addUser(map);
         } catch (Exception e) {
-            logger.error("添加异常！请联系管理员", e.getMessage());
+            logger.error("添加异常！请联系管理员", e);
             return new JsonResult<>(JsonResult.FAIL, "添加异常！请联系管理员");
         }
     }
@@ -130,12 +133,19 @@ public class ManagerController {
             //查询字段转化为map集合
             return managerService.editUser(map);
         } catch (Exception e) {
-            logger.error("修改异常！请联系管理员", e.getMessage());
+            logger.error("修改异常！请联系管理员", e);
             return new JsonResult<>(JsonResult.FAIL, "修改异常！请联系管理员");
         }
     }
 
 
+    /**
+    * @Description: 修改用户密码方法实现
+    * @Params: [map]
+    * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+    * @Author: miaoxuebing
+    * @Date: 2021/7/26 下午3:16
+    **/
     @PostMapping("/editpwd")
     @ApiOperation(value = "修改用户密码接口", notes = "修改用户密码接口")
     @ApiImplicitParams({
@@ -149,7 +159,7 @@ public class ManagerController {
             //查询字段转化为map集合
             return managerService.editUserPwd(map);
         } catch (Exception e) {
-            logger.error("修改异常！请联系管理员", e.getMessage());
+            logger.error("修改异常！请联系管理员", e);
             return new JsonResult<>(JsonResult.FAIL, "修改异常！请联系管理员");
         }
     }
@@ -169,7 +179,7 @@ public class ManagerController {
             //查询字段转化为map集合
             return managerService.delUser(ids);
         } catch (Exception e) {
-            logger.error("删除异常！请联系管理员", e.getMessage());
+            logger.error("删除异常！请联系管理员", e);
             return new JsonResult<>(JsonResult.FAIL, "删除异常！请联系管理员");
         }
     }

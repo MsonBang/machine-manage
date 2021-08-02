@@ -47,7 +47,7 @@ public class MachineServiceImpl implements MachineService {
         int pageSize = (int) map.get("pageSize");
         //判断必填参数
         if (UtilsApi.isNull(String.valueOf(pageNum)) || UtilsApi.isNull(String.valueOf(pageSize))) {
-            logger.info("查询参数pageNo或pageSize缺失");
+            logger.info("查询参数pageNum或pageSize缺失");
             return new JsonResult<>(JsonResult.FAIL, "查询参数缺失！请联系管理员");
         }
         //mybatis分页
@@ -81,14 +81,20 @@ public class MachineServiceImpl implements MachineService {
             logger.info("参数为空，serverip服务器IP必填！");
             return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
         }
+        //判断该ip服务器是否已经添加
+        ServerInfo serverInfo = machineMapper.findOneById(serverIp);
+        if (serverInfo != null) {
+            return new JsonResult<>(JsonResult.FAIL, serverIp + "已经存在，请添加新的服务器！");
+        }
         //插入创建时间
+        map.put("id", UtilsApi.getUUIDStr());
         map.put("createtime", new Date());
         //执行入库
         int i = machineMapper.insertServer(map);
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "新增失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "新增成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "新增成功", i);
     }
 
 
