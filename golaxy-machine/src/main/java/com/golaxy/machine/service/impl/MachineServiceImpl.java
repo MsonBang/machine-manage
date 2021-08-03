@@ -84,9 +84,9 @@ public class MachineServiceImpl implements MachineService {
         //判断该ip服务器是否已经添加
         ServerInfo serverInfo = machineMapper.findOneById(serverIp);
         if (serverInfo != null) {
-            return new JsonResult<>(JsonResult.FAIL, serverIp + "已经存在，请添加新的服务器！");
+            return new JsonResult<>(JsonResult.FAIL, serverIp + "IP已经存在，请添加新的服务器！");
         }
-        //插入创建时间
+        //主键ID、创建时间
         map.put("id", UtilsApi.getUUIDStr());
         map.put("createtime", new Date());
         //执行入库
