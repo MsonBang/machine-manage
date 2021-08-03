@@ -62,6 +62,15 @@ public interface ApplyService {
     JsonResult<Integer> rebackApply(Map<String, Object> map);
 
     /**
+    * @Description: 提交申请接口定义
+    * @Params: [map]
+    * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+    * @Author: miaoxuebing
+    * @Date: 2021/8/3 下午2:24
+    **/
+    JsonResult<Integer> submitApply(Map<String, Object> map);
+
+    /**
     * @Description: 批量删除申请记录接口定义
     * @Params: [ids]
     * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>

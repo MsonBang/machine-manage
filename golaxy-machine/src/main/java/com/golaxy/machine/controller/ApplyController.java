@@ -1,7 +1,6 @@
 package com.golaxy.machine.controller;
 
 import com.golaxy.machine.common.entity.ServerApplyInfo;
-import com.golaxy.machine.common.entity.ServerInfo;
 import com.golaxy.machine.service.ApplyService;
 import com.golaxy.machine.util.JsonResult;
 import com.golaxy.machine.util.pagehelper.PageResult;
@@ -74,7 +73,6 @@ public class ApplyController {
             @ApiImplicitParam(paramType = "query", name = "applyuserid", value = "申请人ID", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "applyuser", value = "申请人姓名", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "applyorg", value = "申请人所在部门", dataType = "string"),
-            @ApiImplicitParam(paramType = "query", name = "uptime", value = "提交时间", dataType = "date"),
             @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "applytype", value = "服务器用途[0数据库1算法2应用程序3综合混合4其他]", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "applyremark", value = "申请用途描述[主要描述服务于那个项目、大概描述]", dataType = "String"),
@@ -107,8 +105,6 @@ public class ApplyController {
             @ApiImplicitParam(paramType = "query", name = "applyuserid", value = "申请人ID", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "applyuser", value = "申请人姓名", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "applyorg", value = "申请人所在部门", dataType = "string"),
-            @ApiImplicitParam(paramType = "query", name = "upstatus", value = "提交状态[0未提交1已提交2已撤销]", dataType = "int"),
-            @ApiImplicitParam(paramType = "query", name = "uptime", value = "提交时间", dataType = "date"),
             @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "applytype", value = "服务器用途[0数据库1算法2应用程序3综合混合4其他]", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "applyremark", value = "申请用途描述[主要描述服务于那个项目、大概描述]", dataType = "String"),
@@ -160,12 +156,33 @@ public class ApplyController {
     @PostMapping("/reback")
     @ApiOperation(value = "撤销申请服务器记录接口", notes = "撤销申请服务器记录接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "id", value = "申请主键id", dataType = "string"),
-            @ApiImplicitParam(paramType = "query", name = "upstatus", value = "提交状态[0未提交1已提交2已撤销]", dataType = "int")
+            @ApiImplicitParam(paramType = "query", name = "id", value = "申请主键id", dataType = "string")
     })
     public JsonResult<Integer> rebackApply(@RequestBody Map<String, Object> map) {
         try {
             return applyService.rebackApply(map);
+        } catch (Exception e) {
+            logger.error("撤销异常！请联系管理员", e);
+            return new JsonResult<>(JsonResult.FAIL, "撤销异常！请联系管理员");
+        }
+    }
+
+
+    /**
+    * @Description: 提交审核操作
+    * @Params: [map]
+    * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+    * @Author: miaoxuebing
+    * @Date: 2021/8/3 下午2:25
+    **/
+    @PostMapping("/submit")
+    @ApiOperation(value = "撤销申请服务器记录接口", notes = "撤销申请服务器记录接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "id", value = "申请主键id", dataType = "string")
+    })
+    public JsonResult<Integer> submitApply(@RequestBody Map<String, Object> map) {
+        try {
+            return applyService.submitApply(map);
         } catch (Exception e) {
             logger.error("撤销异常！请联系管理员", e);
             return new JsonResult<>(JsonResult.FAIL, "撤销异常！请联系管理员");
@@ -187,11 +204,18 @@ public class ApplyController {
             //查询字段转化为map集合
             return applyService.delApply(ids);
         } catch (Exception e) {
-            logger.error("删除异常！请联系管理员", e.getMessage());
+            logger.error("删除异常！请联系管理员", e);
             return new JsonResult<>(JsonResult.FAIL,"删除异常！请联系管理员");
         }
     }
 
+    /**
+    * @Description: 根据主键查询申请记录详情
+    * @Params: [applyid]
+    * @Return: com.golaxy.machine.util.JsonResult<com.golaxy.machine.common.entity.ServerApplyInfo>
+    * @Author: miaoxuebing
+    * @Date: 2021/8/3 下午2:17
+    **/
     @GetMapping("/findOne")
     @ApiOperation(value = "查询申请服务器记录详情信息接口", notes = "查询申请服务器记录详情信息接口")
     public JsonResult<ServerApplyInfo> findOne(

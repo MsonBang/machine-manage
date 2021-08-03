@@ -3,7 +3,6 @@ package com.golaxy.machine.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.golaxy.machine.common.entity.ServerApplyInfo;
-import com.golaxy.machine.common.entity.ServerInfo;
 import com.golaxy.machine.mapper.ApplyMapper;
 import com.golaxy.machine.service.ApplyService;
 import com.golaxy.machine.util.JsonResult;
@@ -101,13 +100,14 @@ public class ApplyServiceImpl implements ApplyService {
             logger.info("参数为空，howlong使用周期时长必填！");
             return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
         }
-
+        //生成主键ID
+        map.put("id", UtilsApi.getUUIDStr());
         //执行入库
         int i = applyMapper.insertApply(map);
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "新增失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "新增成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "新增成功", i);
     }
 
 
@@ -163,7 +163,7 @@ public class ApplyServiceImpl implements ApplyService {
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "修改失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "修改成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "修改成功", i);
     }
 
 
@@ -224,16 +224,9 @@ public class ApplyServiceImpl implements ApplyService {
     public JsonResult<Integer> rebackApply(Map<String, Object> map) {
         //审核记录主键
         String id = (String) map.get("id");
-        //提交状态[0未提交1已提交2已撤销]
-        String upstatus = (String) map.get("upstatus");
-
         //判断必填参数
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，id申请记录主键必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
-        }
-        if (UtilsApi.isNull(upstatus)) {
-            logger.info("参数为空，upstatus提交状态必填！");
             return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
         }
         //执行修改
@@ -241,7 +234,35 @@ public class ApplyServiceImpl implements ApplyService {
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "撤销失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "撤销成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "撤销成功", i);
+    }
+
+
+    /**
+     * @Description: 提交审核操作接口方法实现
+     * @Params: [map]
+     * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/3 下午2:28
+     **/
+    @Override
+    public JsonResult<Integer> submitApply(Map<String, Object> map) {
+        //审核记录主键
+        String id = (String) map.get("id");
+        //判断必填参数
+        if (UtilsApi.isNull(id)) {
+            logger.info("参数为空，id申请记录主键必填！");
+            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+        }
+        //插入提交时间
+        map.put("uptime", new Date());
+        map.put("upstatus", 1);
+        //执行修改
+        int i = applyMapper.updateApply(map);
+        if (i <= 0) {
+            return new JsonResult<>(JsonResult.FAIL, "提交审核失败");
+        }
+        return new JsonResult<>(JsonResult.SUCCESS, "提交审核成功", i);
     }
 
 
@@ -264,7 +285,7 @@ public class ApplyServiceImpl implements ApplyService {
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "删除失败失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "删除成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "删除成功", i);
     }
 
 
