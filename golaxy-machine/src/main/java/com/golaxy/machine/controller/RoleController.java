@@ -1,6 +1,5 @@
 package com.golaxy.machine.controller;
 
-import com.golaxy.machine.common.entity.RoleInfo;
 import com.golaxy.machine.service.RoleService;
 import com.golaxy.machine.util.JsonResult;
 import com.golaxy.machine.util.pagehelper.PageResult;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,7 +24,7 @@ public class RoleController {
     /**
      * 日志对象
      **/
-    private final static Logger logger = LoggerFactory.getLogger(MachineController.class);
+    private final static Logger logger = LoggerFactory.getLogger(RoleController.class);
     @Autowired
     private RoleService roleService;
 
