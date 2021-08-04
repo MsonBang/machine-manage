@@ -117,7 +117,7 @@ public class RoleController {
      * @Author: miaoxuebing
      * @Date: 2021/8/3 下午3:33
      **/
-    @GetMapping("/delete")
+    @GetMapping("/del")
     @ApiOperation(value = "删除角色接口", notes = "删除角色接口")
     public JsonResult<Boolean> delUser(
             @RequestParam(required = true, defaultValue = "") @ApiParam(required = true, defaultValue = "", value = "角色ID") String roleId) {

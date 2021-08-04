@@ -37,7 +37,7 @@ public class JwtUtils {
                     .withClaim("uId", userId)
                     .withClaim("ps", password)
                     //token有效时间保持14天
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
                     .sign(Algorithm.HMAC256(getValueByKey("config", "token_secret")));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

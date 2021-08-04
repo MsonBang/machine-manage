@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.golaxy.machine.common.contants.ResultContants;
 import com.golaxy.machine.common.entity.MenuInfo;
 import com.golaxy.machine.common.entity.RoleInfo;
-import com.golaxy.machine.common.entity.ServerInfo;
 import com.golaxy.machine.mapper.RoleMapper;
 import com.golaxy.machine.service.RoleService;
 import com.golaxy.machine.util.JsonResult;
@@ -17,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.util.*;
 
 /**
@@ -166,7 +164,7 @@ public class RoleServiceImpl implements RoleService {
         if (!flag) {
             return new JsonResult<>(JsonResult.FAIL, "删除失败");
         }
-        return new JsonResult<>(JsonResult.SUCCESS, "删除成功成功", flag);
+        return new JsonResult<>(JsonResult.SUCCESS, "删除成功", flag);
     }
 
 
@@ -202,7 +200,7 @@ public class RoleServiceImpl implements RoleService {
             }};
             roleMapper.insertUserRole(maps);
         });
-        return new JsonResult<>(JsonResult.SUCCESS, "分配用户角色角色成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "分配用户角色成功");
     }
 
 

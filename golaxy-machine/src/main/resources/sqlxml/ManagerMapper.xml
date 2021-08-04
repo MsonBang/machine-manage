@@ -107,7 +107,7 @@
                 updatetime = #{updatetime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateuser != null and updateuser !=''" >
-                updateuser = #{updateuser,jdbcType=VARCHAR},
+                updateuser = #{updateuser,jdbcType=VARCHAR}
             </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}

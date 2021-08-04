@@ -23,7 +23,7 @@ public class RoleInfo {
     private String rolename;
 
     @ApiModelProperty(name = "rolecode", value = "角色编码", dataType = "string")
-    private String rolevode;
+    private String rolecode;
 
     @ApiModelProperty(name = "rolestatus", value = "角色状态是否启动0否1是", dataType = "int")
     private String rolestatus;

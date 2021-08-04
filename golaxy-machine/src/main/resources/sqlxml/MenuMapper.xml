@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.golaxy.machine.mapper.MenuMapper">
+
+    <!--根据用户名-->
+    <select id="getUserInfo" parameterType="java.lang.String" resultType="com.golaxy.machine.common.entity.UserInfo">
+        SELECT *
+        FROM sys_user u
+        WHERE u.username=#{username} and u.delflag='0'
+    </select>
+
+    <select id="getUserInfoById" parameterType="java.lang.String" resultType="com.golaxy.machine.common.entity.UserInfo">
+        SELECT *
+        FROM sys_user u
+        WHERE u.id=#{id} and u.delflag='0'
+    </select>
+
+    <!--条件查询用户信息列表-->
+    <select id="queryList" parameterType="java.util.Map" resultType="com.golaxy.machine.common.entity.RoleInfo">
+        select * from sys_role
+        <where>
+            1=1
+            <if test="rolename != null and rolename !=''" >
+                and rolename = #{rolename}
+            </if>
+            <if test="rolecode != null and rolecode !=''" >
+                and rolecode = #{rolecode}
+            </if>
+            <if test="rolestatus != null" >
+                and rolestatus = #{rolestatus}
+            </if>
+            and delflag = 0 order by roleorder asc
+        </where>
+    </select>
+
+    <!--新增标签-->
+    <insert id="insert" parameterType="com.golaxy.machine.common.entity.UserInfo">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null and id !=''" >
+                id,
+            </if>
+            <if test="username != null and username !=''" >
+                username,
+            </if>
+            <if test="password != null and password !=''" >
+                password,
+            </if>
+            <if test="nickname != null and nickname !=''" >
+                nickname,
+            </if>
+            <if test="isadmin != null and isadmin !=''">
+                isadmin,
+            </if>
+            <if test="salt != null and salt !=''">
+                salt,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="createuser != null and createuser !=''" >
+                createuser
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null and id !=''" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null and username !=''" >
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password !=''" >
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null and nickname !=''" >
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="isadmin != null and isadmin !=''">
+                #{isadmin,jdbcType=VARCHAR},
+            </if>
+            <if test="salt != null and salt !=''">
+                #{salt,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createuser != null and createuser !=''" >
+                #{createuser,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <!--更新标签-->
+    <update id="updateUser" parameterType="java.util.Map">
+        update sys_user
+        <set>
+            <if test="username != null and username !=''" >
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null and password !=''" >
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null and nickname !=''" >
+                nickname = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="isadmin != null " >
+                isadmin = #{isadmin,jdbcType=INTEGER},
+            </if>
+            <if test="updatetime != null" >
+                updatetime = #{updatetime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateuser != null and updateuser !=''" >
+                updateuser = #{updateuser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--批量删除用户信息-->
+    <update id="batchDelUser" parameterType="java.util.List">
+        update sys_user
+        set delflag = 1
+        where id in
+        <foreach collection="list" item="arr" index="no" open="("
+                 separator="," close=")">
+            #{arr}
+        </foreach>
+    </update>
+
+</mapper>
