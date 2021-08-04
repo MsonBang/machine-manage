@@ -2,11 +2,10 @@ package com.golaxy.machine.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.golaxy.machine.common.entity.ServerInfo;
-import com.golaxy.machine.util.JsonResult;
 import com.golaxy.machine.common.entity.UserInfo;
-import com.golaxy.machine.service.ManagerService;
 import com.golaxy.machine.mapper.ManagerMapper;
+import com.golaxy.machine.service.ManagerService;
+import com.golaxy.machine.util.JsonResult;
 import com.golaxy.machine.util.JwtUtils;
 import com.golaxy.machine.util.RedisUtil;
 import com.golaxy.machine.util.UtilsApi;
@@ -91,8 +90,8 @@ public class ManagerServiceImpl implements ManagerService {
         int pageSize = (int) map.get("pageSize");
         //判断必填参数
         if (UtilsApi.isNull(String.valueOf(pageNum)) || UtilsApi.isNull(String.valueOf(pageSize))) {
-            logger.info("查询参数pageNum或pageSize缺失");
-            return new JsonResult<>(JsonResult.FAIL, "查询参数缺失！请联系管理员");
+            logger.info("查询参数pageNum或pageSize缺失！");
+            return new JsonResult<>(JsonResult.FAIL, "查询参数缺失！请联系管理员！");
         }
         //mybatis分页
         PageHelper.startPage(pageNum, pageSize);
@@ -201,11 +200,11 @@ public class ManagerServiceImpl implements ManagerService {
         //判断参数必填，判断两次密码是否一致
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，人员主键ID必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，人员主键ID必填！");
         }
         if (UtilsApi.isNull(password)) {
             logger.info("参数为空，修改密码参数必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，修改密码参数必填！");
         }
         if (!password.equals(repassword)) {
             return new JsonResult<>(JsonResult.FAIL, "修改失败，两次密码不一致");
@@ -240,12 +239,12 @@ public class ManagerServiceImpl implements ManagerService {
         //判断参数为空
         if (ids.size() == 0 || ids == null) {
             logger.info("参数为空，服务器ID必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，服务器ID必填！");
         }
 
         int i = managerMapper.batchDelUser(ids);
         if (i <= 0) {
-            return new JsonResult<>(JsonResult.FAIL, "删除失败失败");
+            return new JsonResult<>(JsonResult.FAIL, "删除失败");
         }
         return new JsonResult<>(JsonResult.SUCCESS, "删除成功", i);
     }

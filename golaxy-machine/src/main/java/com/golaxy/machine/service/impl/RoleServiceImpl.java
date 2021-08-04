@@ -46,8 +46,8 @@ public class RoleServiceImpl implements RoleService {
         int pageSize = (int) map.get("pageSize");
         //判断必填参数
         if (UtilsApi.isNull(String.valueOf(pageNum)) || UtilsApi.isNull(String.valueOf(pageSize))) {
-            logger.info("查询参数pageNum或pageSize缺失");
-            return new JsonResult<>(JsonResult.FAIL, "查询参数缺失！请联系管理员");
+            logger.info("查询参数pageNum或pageSize缺失！");
+            return new JsonResult<>(JsonResult.FAIL, "查询参数缺失！请联系管理员！");
         }
         //mybatis分页
         PageHelper.startPage(pageNum, pageSize);
@@ -74,11 +74,11 @@ public class RoleServiceImpl implements RoleService {
         //判断参数必填
         if (UtilsApi.isNull(rolename)) {
             logger.info("参数为空，rolename角色名称必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，rolename角色名称必填！");
         }
         if (UtilsApi.isNull(rolecode)) {
             logger.info("参数为空，rolecode角色编码必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，rolecode角色编码必填！");
         }
         //判断是否已经存在
         RoleInfo roleInfo = roleMapper.findByName(rolename);
@@ -119,15 +119,15 @@ public class RoleServiceImpl implements RoleService {
         //判断参数必填
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，角色主键id必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，角色主键id必填！");
         }
         if (UtilsApi.isNull(rolename)) {
             logger.info("参数为空，rolename角色名称必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，rolename角色名称必填！");
         }
         if (UtilsApi.isNull(rolecode)) {
             logger.info("参数为空，rolecode角色编码必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，rolecode角色编码必填！");
         }
         //查询是否存在角色
         RoleInfo roleInfo = roleMapper.findById(id);
@@ -157,7 +157,7 @@ public class RoleServiceImpl implements RoleService {
     public JsonResult<Boolean> delRole(String roleId) {
         if (UtilsApi.isNull(roleId)) {
             logger.info("参数为空，角色主键roleId必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，角色主键roleId必填！");
         }
         //执行入库
         boolean flag = roleMapper.delRole(roleId);
@@ -183,11 +183,11 @@ public class RoleServiceImpl implements RoleService {
         //检验参数必填
         if (UtilsApi.isNull(userId)) {
             logger.info("参数为空，用户主键userid必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，用户主键userid必填！");
         }
         if (roleCodeList == null || roleCodeList.size() == 0) {
             logger.info("参数为空，角色编码集合必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，角色编码集合必填！");
         }
         //清除该用户之前绑定角色
         roleMapper.delUserAllRole(userId);
@@ -219,11 +219,11 @@ public class RoleServiceImpl implements RoleService {
         //检验参数必填
         if (UtilsApi.isNull(rolecode)) {
             logger.info("参数为空，角色编码rolecode必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，角色编码rolecode必填！");
         }
         if (menuList == null || menuList.size() == 0) {
             logger.info("参数为空，菜单id集合必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，菜单id集合必填！");
         }
         //清除该用户之前绑定角色
         roleMapper.delUserAllMenu(rolecode);
@@ -251,7 +251,7 @@ public class RoleServiceImpl implements RoleService {
     public JsonResult<Map<String, Object>> getUserMenuList(String userId) {
         if (UtilsApi.isNull(userId)) {
             logger.info("参数为空，用户主键userid必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，用户主键userid必填！");
         }
         //查询当前用户所有权限
         List<String> roleCodeList = roleMapper.getUserRole(userId);

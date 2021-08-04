@@ -16,20 +16,20 @@
     </select>
 
     <!--条件查询用户信息列表-->
-    <select id="queryList" parameterType="java.util.Map" resultType="com.golaxy.machine.common.entity.RoleInfo">
-        select * from sys_role
+    <select id="queryList" parameterType="java.util.Map" resultType="com.golaxy.machine.common.entity.MenuInfo">
+        select * from sys_item
         <where>
             1=1
-            <if test="rolename != null and rolename !=''" >
-                and rolename = #{rolename}
+            <if test="menuname != null and menuname !=''" >
+                and menuname = #{menuname}
             </if>
-            <if test="rolecode != null and rolecode !=''" >
-                and rolecode = #{rolecode}
+            <if test="menucode != null and menucode !=''" >
+                and menucode = #{menucode}
             </if>
-            <if test="rolestatus != null" >
-                and rolestatus = #{rolestatus}
+            <if test="menutype != null" >
+                and menutype = #{menutype}
             </if>
-            and delflag = 0 order by roleorder asc
+            and delflag = 0
         </where>
     </select>
 

@@ -82,23 +82,23 @@ public class ApplyServiceImpl implements ApplyService {
         //判断参数必填
         if (UtilsApi.isNull(serverName)) {
             logger.info("参数为空，servername服务器名称必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，servername服务器名称必填！");
         }
         if (UtilsApi.isNull(serverIp)) {
             logger.info("参数为空，serverip服务器IP必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，serverip服务器IP必填！");
         }
         if (UtilsApi.isNull(String.valueOf(applytype))) {
             logger.info("参数为空，applytype服务器用途参数必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，applytype服务器用途参数必填！");
         }
         if (UtilsApi.isNull(applyremark)) {
             logger.info("参数为空，applymark服务器用途描述必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，applymark服务器用途描述必填！");
         }
         if (UtilsApi.isNull(String.valueOf(howlong))) {
             logger.info("参数为空，howlong使用周期时长必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，howlong使用周期时长必填！");
         }
         //生成主键ID
         map.put("id", UtilsApi.getUUIDStr());
@@ -136,27 +136,27 @@ public class ApplyServiceImpl implements ApplyService {
         //判断参数必填
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，id申请记录主键必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，id申请记录主键必填！");
         }
         if (UtilsApi.isNull(serverName)) {
             logger.info("参数为空，servername服务器名称必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，servername服务器名称必填！");
         }
         if (UtilsApi.isNull(serverIp)) {
             logger.info("参数为空，serverip服务器IP必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，serverip服务器IP必填！");
         }
         if (UtilsApi.isNull(String.valueOf(applytype))) {
             logger.info("参数为空，applytype服务器用途参数必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，applytype服务器用途参数必填！");
         }
         if (UtilsApi.isNull(applyremark)) {
             logger.info("参数为空，applymark服务器用途描述必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，applymark服务器用途描述必填！");
         }
         if (UtilsApi.isNull(String.valueOf(howlong))) {
             logger.info("参数为空，howlong使用周期时长必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，howlong使用周期时长必填！");
         }
         //执行修改
         int i = applyMapper.updateApply(map);
@@ -188,19 +188,19 @@ public class ApplyServiceImpl implements ApplyService {
         //判断参数必填
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，id申请记录主键必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，id申请记录主键必填！");
         }
         if (UtilsApi.isNull(checkuser)) {
             logger.info("参数为空，checkuser审核人必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，checkuser审核人必填！");
         }
         if (UtilsApi.isNull(String.valueOf(checkstatus))) {
             logger.info("参数为空，checkstatus审核状态必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，checkstatus审核状态必填！");
         }
         if (UtilsApi.isNull(checkremark)) {
             logger.info("参数为空，checkremark审核备注信息必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，checkremark审核备注信息必填！");
         }
         //添加审核时间
         map.put("checktime", new Date());
@@ -227,7 +227,7 @@ public class ApplyServiceImpl implements ApplyService {
         //判断必填参数
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，id申请记录主键必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，id申请记录主键必填！");
         }
         //执行修改
         int i = applyMapper.rebackApply(map);
@@ -252,7 +252,7 @@ public class ApplyServiceImpl implements ApplyService {
         //判断必填参数
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，id申请记录主键必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，id申请记录主键必填！");
         }
         //插入提交时间
         map.put("uptime", new Date());
@@ -278,12 +278,12 @@ public class ApplyServiceImpl implements ApplyService {
         //判断参数为空
         if (ids.size() == 0 || ids == null) {
             logger.info("参数为空，服务器ID必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，服务器ID必填！");
         }
 
         int i = applyMapper.batchDelApply(ids);
         if (i <= 0) {
-            return new JsonResult<>(JsonResult.FAIL, "删除失败失败");
+            return new JsonResult<>(JsonResult.FAIL, "删除失败");
         }
         return new JsonResult<>(JsonResult.SUCCESS, "删除成功", i);
     }
@@ -301,7 +301,7 @@ public class ApplyServiceImpl implements ApplyService {
         //判断参数必填
         if (UtilsApi.isNull(applyid)) {
             logger.info("参数为空，服务器主键ID必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，服务器主键ID必填！");
         }
         ServerApplyInfo serverApplyInfo = applyMapper.findOneById(applyid);
 

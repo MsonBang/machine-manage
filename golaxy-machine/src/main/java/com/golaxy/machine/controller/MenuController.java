@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.spring.web.json.Json;
 
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +67,7 @@ public class MenuController {
     @ApiOperation(value = "新增菜单信息接口", notes = "新增菜单信息接口")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "menuname", value = "菜单名称", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "parentid", value = "父级菜单ID", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "menucode", value = "菜单编码", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "menuurl", value = "路径URL", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "menutype ", value = "类型[0菜单1按钮]", dataType = "int"),

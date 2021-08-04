@@ -75,11 +75,11 @@ public class MachineServiceImpl implements MachineService {
         //判断参数必填
         if (UtilsApi.isNull(serverName)) {
             logger.info("参数为空，servername服务器名称必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，servername服务器名称必填！");
         }
         if (UtilsApi.isNull(serverIp)) {
             logger.info("参数为空，serverip服务器IP必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，serverip服务器IP必填！");
         }
         //判断该ip服务器是否已经添加
         ServerInfo serverInfo = machineMapper.findOneById(serverIp);
@@ -110,7 +110,7 @@ public class MachineServiceImpl implements MachineService {
         String id = (String) map.get("id");
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，服务器主键ID必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，服务器主键ID必填！");
         }
         //添加修改时间
         map.put("updatetime", new Date());
@@ -135,7 +135,7 @@ public class MachineServiceImpl implements MachineService {
         //判断参数必填
         if (UtilsApi.isNull(id)) {
             logger.info("参数为空，服务器主键ID必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，服务器主键ID必填！");
         }
         ServerInfo serverInfo = machineMapper.findOneById(id);
 
@@ -155,12 +155,12 @@ public class MachineServiceImpl implements MachineService {
         //判断参数为空
         if (ids.size() == 0 || ids == null) {
             logger.info("参数为空，服务器ID必填！");
-            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+            return new JsonResult<>(JsonResult.FAIL, "参数为空，服务器ID必填！");
         }
 
         int i = machineMapper.batchDelServer(ids);
         if (i <= 0) {
-            return new JsonResult<>(JsonResult.FAIL, "删除失败失败");
+            return new JsonResult<>(JsonResult.FAIL, "删除失败");
         }
         return new JsonResult<>(JsonResult.SUCCESS, "删除成功");
     }
