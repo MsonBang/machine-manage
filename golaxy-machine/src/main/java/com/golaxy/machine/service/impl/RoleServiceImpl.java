@@ -2,6 +2,8 @@ package com.golaxy.machine.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.golaxy.machine.common.contants.ResultContants;
+import com.golaxy.machine.common.entity.MenuInfo;
 import com.golaxy.machine.common.entity.RoleInfo;
 import com.golaxy.machine.common.entity.ServerInfo;
 import com.golaxy.machine.mapper.RoleMapper;
@@ -16,9 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.Role;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author miaoxuebing
@@ -149,12 +149,12 @@ public class RoleServiceImpl implements RoleService {
 
 
     /**
-    * @Description: 删除角色信息方法实现
-    * @Params: [roleId]
-    * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
-    * @Author: miaoxuebing
-    * @Date: 2021/8/3 下午5:11
-    **/
+     * @Description: 删除角色信息方法实现
+     * @Params: [roleId]
+     * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/3 下午5:11
+     **/
     @Override
     public JsonResult<Boolean> delRole(String roleId) {
         if (UtilsApi.isNull(roleId)) {
@@ -169,42 +169,117 @@ public class RoleServiceImpl implements RoleService {
         return new JsonResult<>(JsonResult.SUCCESS, "删除成功成功", flag);
     }
 
-    
+
     /**
-    * @Description: 
-    * @Params: [map]
-    * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
-    * @Author: miaoxuebing
-    * @Date: 2021/8/3 下午5:15
-    **/
+     * @Description: 为用户授予role角色方法实现
+     * @Params: [map]
+     * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/3 下午5:15
+     **/
     @Override
     public JsonResult<Integer> grantRole(Map<String, Object> map) {
-        return null;
+        //获取参数
+        String userId = (String) map.get("userid");
+        List<String> roleCodeList = (List<String>) map.get("roleList");
+        //检验参数必填
+        if (UtilsApi.isNull(userId)) {
+            logger.info("参数为空，用户主键userid必填！");
+            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+        }
+        if (roleCodeList == null || roleCodeList.size() == 0) {
+            logger.info("参数为空，角色编码集合必填！");
+            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+        }
+        //清除该用户之前绑定角色
+        roleMapper.delUserAllRole(userId);
+        //进行重新赋予角色
+        roleCodeList.forEach(rolecode -> {
+            Map<String, Object> maps = new HashMap<String, Object>() {{
+                put("id", UtilsApi.getUUIDStr());
+                put("rolecode", rolecode);
+                put("userid", userId);
+            }};
+            roleMapper.insertUserRole(maps);
+        });
+        return new JsonResult<>(JsonResult.SUCCESS, "分配用户角色角色成功");
     }
 
-    
+
     /**
-    * @Description: 
-    * @Params: [map]
-    * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
-    * @Author: miaoxuebing
-    * @Date: 2021/8/3 下午5:15
-    **/
+     * @Description: 为角色分配菜单方法实现
+     * @Params: [map]
+     * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/3 下午5:15
+     **/
     @Override
     public JsonResult<Integer> grantMenu(Map<String, Object> map) {
-        return null;
+        //获取参数
+        String rolecode = (String) map.get("rolecode");
+        List<String> menuList = (List<String>) map.get("menuList");
+        //检验参数必填
+        if (UtilsApi.isNull(rolecode)) {
+            logger.info("参数为空，角色编码rolecode必填！");
+            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+        }
+        if (menuList == null || menuList.size() == 0) {
+            logger.info("参数为空，菜单id集合必填！");
+            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+        }
+        //清除该用户之前绑定角色
+        roleMapper.delUserAllMenu(rolecode);
+        //进行重新赋予角色
+        menuList.forEach(menuid -> {
+            Map<String, Object> maps = new HashMap<String, Object>() {{
+                put("id", UtilsApi.getUUIDStr());
+                put("menuid", menuid);
+                put("rolecode", rolecode);
+            }};
+            roleMapper.insertRoleMenu(maps);
+        });
+        return new JsonResult<>(JsonResult.SUCCESS, "分配角色菜单成功");
     }
 
-    
+
     /**
-    * @Description: 
-    * @Params: [userId]
-    * @Return: com.golaxy.machine.util.JsonResult<java.util.Map<java.lang.String,java.lang.Object>>
-    * @Author: miaoxuebing
-    * @Date: 2021/8/3 下午5:15
-    **/
+     * @Description: 用户登陆获取用户所有角色菜单列表
+     * @Params: [userId]
+     * @Return: com.golaxy.machine.util.JsonResult<java.util.Map < java.lang.String, java.lang.Object>>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/3 下午5:15
+     **/
     @Override
     public JsonResult<Map<String, Object>> getUserMenuList(String userId) {
-        return null;
+        if (UtilsApi.isNull(userId)) {
+            logger.info("参数为空，用户主键userid必填！");
+            return new JsonResult<>(JsonResult.FAIL, "参数缺失！请联系管理员");
+        }
+        //查询当前用户所有权限
+        List<String> roleCodeList = roleMapper.getUserRole(userId);
+        if (roleCodeList.size() == 0 || roleCodeList == null) {
+            return new JsonResult<>(JsonResult.FAIL, "该用户尚未授权，请联系管理员授权后登陆！");
+        }
+        //根据角色编码role_Code查询所有菜单
+        List<MenuInfo> menuInfoList = roleMapper.getUserMenu(roleCodeList);
+        //将菜单和按钮分开摘取出来，封装返回结果
+        List<MenuInfo> menuInfos = new ArrayList<>();
+        List<String> operators = new ArrayList<>();
+        menuInfoList.forEach(menuInfo -> {
+            String menuType = menuInfo.getMenutype();
+            //这里是前端展示的菜单
+            if (ResultContants.MENU_TYPE_CD.equals(menuType)) {
+                menuInfos.add(menuInfo);
+            }
+            //这里是按钮，具体到每个页面中按钮级别
+            if (ResultContants.MENU_TYPE_AN.equals(menuType)) {
+                operators.add(menuInfo.getMenucode());
+            }
+        });
+        Map<String, Object> resultMap = new HashMap<String, Object>() {{
+            put("menuInfos", menuInfos);
+            put("operators", operators);
+        }};
+        return new JsonResult<>(JsonResult.SUCCESS, "获取角色菜单成功");
     }
 }

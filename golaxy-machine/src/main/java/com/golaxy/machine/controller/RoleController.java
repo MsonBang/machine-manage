@@ -165,7 +165,7 @@ public class RoleController {
     @PostMapping("/grantMenuToRole")
     @ApiOperation(value = "为角色分配菜单", notes = "为角色分配菜单")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "roleCode", value = "主键ID", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "rolecode", value = "主键ID", dataType = "string"),
             @ApiImplicitParam(paramType = "query", allowMultiple = true, name = "menuList", value = "菜单编码集合", dataType = "String"),
     })
     public JsonResult<Integer> grantMenuToRole(@RequestBody Map<String, Object> map) {
