@@ -50,7 +50,7 @@ public interface MenuService {
      * @Author: miaoxuebing
      * @Date: 2021/8/4 上午11:13
      **/
-    JsonResult<Integer> batchDelMenu(List<String> list);
+    JsonResult<Boolean> batchDelMenu(List<String> list);
 
     /**
      * @Description: 查询菜单树接口定义

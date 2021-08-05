@@ -159,7 +159,7 @@ public class RoleServiceImpl implements RoleService {
             logger.info("参数为空，角色主键roleId必填！");
             return new JsonResult<>(JsonResult.FAIL, "参数为空，角色主键roleId必填！");
         }
-        //执行入库
+        //执行
         boolean flag = roleMapper.delRole(roleId);
         if (!flag) {
             return new JsonResult<>(JsonResult.FAIL, "删除失败");

@@ -97,6 +97,7 @@ public class MenuController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "菜单主键ID", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "menuname", value = "菜单名称", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "parentid", value = "父级菜单ID", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "menucode", value = "菜单编码", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "menuurl", value = "路径URL", dataType = "string"),
             @ApiImplicitParam(paramType = "query", name = "menutype ", value = "类型[0菜单1按钮]", dataType = "int"),
@@ -115,46 +116,46 @@ public class MenuController {
 
 
     /**
-    * @Description: 批量删除菜单
-    * @Params: [ids]
-    * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
-    * @Author: miaoxuebing
-    * @Date: 2021/8/4 上午11:14
-    **/
+     * @Description: 批量删除菜单
+     * @Params: [ids]
+     * @Return: com.golaxy.machine.util.JsonResult<java.lang.Integer>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/4 上午11:14
+     **/
     @PostMapping("/del")
     @ApiOperation(value = "批量删除菜单接口", notes = "批量删除菜单接口")
-    public JsonResult<Integer> delUser(@RequestBody List<String> ids){
+    public JsonResult<Boolean> delUser(@RequestBody List<String> ids) {
         try {
             //查询字段转化为map集合
             return menuService.batchDelMenu(ids);
         } catch (Exception e) {
-            logger.error("删除异常！请联系管理员", e.getMessage());
-            return new JsonResult<>(JsonResult.FAIL,"删除异常！请联系管理员");
+            logger.error("删除异常！请联系管理员", e);
+            return new JsonResult<>(JsonResult.FAIL, "删除异常！请联系管理员");
         }
     }
 
 
     /**
-    * @Description: 查询菜单树-前端展示
-    * @Params: [menuId, menuName]
-    * @Return: com.golaxy.machine.util.JsonResult<java.util.List<com.golaxy.machine.common.entity.MenuInfoChild>>
-    * @Author: miaoxuebing
-    * @Date: 2021/8/4 上午11:21
-    **/
+     * @Description: 查询菜单树-前端展示
+     * @Params: [menuId, menuName]
+     * @Return: com.golaxy.machine.util.JsonResult<java.util.List < com.golaxy.machine.common.entity.MenuInfoChild>>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/4 上午11:21
+     **/
     @GetMapping("/treelist")
     @ApiOperation(value = "菜单树查询接口", notes = "菜单树查询接口")
     public JsonResult<List<MenuInfoChild>> getUserList(
-            @RequestParam(required = false, defaultValue = "") @ApiParam(defaultValue = "", value = "菜单ID") String menuId,
-            @RequestParam(required = false, defaultValue = "") @ApiParam(defaultValue = "", value = "菜单名称") String menuName) {
+            @RequestParam(required = false, defaultValue = "") @ApiParam(defaultValue = "", value = "菜单ID") String menuid,
+            @RequestParam(required = false, defaultValue = "") @ApiParam(defaultValue = "", value = "菜单名称") String menuname) {
         try {
             Map<String, Object> paraMap = new HashMap<String, Object>() {{
-                put("parent_id",menuId);
-                put("menuName", menuName);
+                put("parentid", menuid);
+                put("menuname", menuname);
             }};
             return menuService.findMenuList(paraMap);
         } catch (Exception e) {
-            logger.error("查询菜单树异常！请联系管理员", e.getMessage());
-            return new JsonResult<>(JsonResult.FAIL,"查询菜单树异常！请联系管理员");
+            logger.error("查询菜单树异常！请联系管理员", e);
+            return new JsonResult<>(JsonResult.FAIL, "查询菜单树异常！请联系管理员");
         }
     }
 

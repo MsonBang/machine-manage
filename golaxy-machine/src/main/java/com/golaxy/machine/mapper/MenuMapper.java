@@ -1,6 +1,7 @@
 package com.golaxy.machine.mapper;
 
 import com.golaxy.machine.common.entity.MenuInfo;
+import com.golaxy.machine.common.entity.MenuInfoChild;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -42,6 +43,15 @@ public interface MenuMapper {
     MenuInfo findByCode(String menucode);
 
     /**
+     * @Description: 根据主键查询菜单信息mapper
+     * @Params: [id]
+     * @Return: com.golaxy.machine.common.entity.MenuInfo
+     * @Author: miaoxuebing
+     * @Date: 2021/8/4 下午4:33
+     **/
+    MenuInfo findById(String id);
+
+    /**
      * @Description: 插入菜单信息mapper
      * @Params: [map]
      * @Return: int
@@ -49,4 +59,32 @@ public interface MenuMapper {
      * @Date: 2021/8/4 下午4:03
      **/
     int insertMenu(Map<String, Object> map);
+
+    /**
+     * @Description: 编辑菜单信息mapper
+     * @Params: [map]
+     * @Return: int
+     * @Author: miaoxuebing
+     * @Date: 2021/8/4 下午4:49
+     **/
+    int updateMenu(Map<String, Object> map);
+
+    /**
+     * @Description: 批量删除菜单信息mapper
+     * @Params: [list]
+     * @Return: boolean
+     * @Author: miaoxuebing
+     * @Date: 2021/8/4 下午4:49
+     **/
+    boolean batchDelMenu(List<String> list);
+
+    /**
+     * @Description: 获取菜单列表
+     * @Params: [map]
+     * @Return: java.util.List<com.golaxy.machine.common.entity.MenuInfoChild>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/5 上午9:46
+     **/
+    List<MenuInfoChild> findList(Map<String, Object> map);
+
 }
