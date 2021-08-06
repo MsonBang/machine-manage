@@ -32,6 +32,15 @@
         order by menuorder
     </select>
 
+    <!--根据ids集合查询所有的菜单-->
+    <select id="findListByIds" parameterType="java.util.List" resultType="com.golaxy.machine.common.entity.MenuInfoChild">
+        select * from sys_item where delflag = 0 and id in
+        <foreach collection="list" item="arr" index="no" open="("
+                 separator="," close=")">
+            #{arr}
+        </foreach>
+    </select>
+
     <!--条件查询菜单列表-->
     <select id="queryList" parameterType="java.util.Map" resultType="com.golaxy.machine.common.entity.MenuInfo">
         SELECT

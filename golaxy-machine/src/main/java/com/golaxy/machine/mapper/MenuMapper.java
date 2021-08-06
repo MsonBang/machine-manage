@@ -87,4 +87,13 @@ public interface MenuMapper {
      **/
     List<MenuInfoChild> findList(Map<String, Object> map);
 
+    /**
+     * @Description: 根据菜单ids集合查询菜单
+     * @Params: [map]
+     * @Return: java.util.List<com.golaxy.machine.common.entity.MenuInfoChild>
+     * @Author: miaoxuebing
+     * @Date: 2021/8/5 上午11:28
+     **/
+    List<MenuInfoChild> findListByIds(List<String> list);
+
 }

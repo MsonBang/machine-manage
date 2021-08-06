@@ -166,4 +166,51 @@
         </trim>
     </insert>
 
+    <!--为角色绑定菜单-->
+    <insert id="insertRoleMenu" parameterType="java.util.Map">
+        insert into sys_role_item
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null and id !=''" >
+                id,
+            </if>
+            <if test="rolecode != null and rolecode !=''" >
+                rolecode,
+            </if>
+            <if test="menuid != null and menuid !=''" >
+                menuid
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null and id !=''" >
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="rolecode != null and rolecode !=''" >
+                #{rolecode,jdbcType=VARCHAR},
+            </if>
+            <if test="menuid != null and menuid !=''" >
+                #{menuid,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <!--删除角色对应的所有菜单-->
+    <delete id="delUserAllMenu" parameterType="java.lang.String">
+        delete from sys_role_item where rolecode = #{rolecode}
+    </delete>
+
+    <!--获取该用户所有的权限集合-->
+    <select id="getUserRole" parameterType="java.lang.String" resultType="java.lang.String">
+        select rolecode from sys_user_role where userid = #{userId}
+    </select>
+
+    <!--根据角色code集合查询该用户所有的菜单集合-->
+    <select id="getUserMenu" parameterType="java.util.List" resultType="com.golaxy.machine.common.entity.MenuInfo">
+        select st.* from sys_item st, sys_role_item srt where rolecode in
+        <foreach collection="list" item="arr" index="no" open="("
+                 separator="," close=")">
+            #{arr}
+        </foreach>
+        and st.id = srt.menuid and st.delflag = 0
+    </select>
+
 </mapper>

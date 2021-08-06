@@ -4,10 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.golaxy.machine.common.contants.ResultContants;
 import com.golaxy.machine.common.entity.MenuInfo;
+import com.golaxy.machine.common.entity.MenuInfoChild;
 import com.golaxy.machine.common.entity.RoleInfo;
+import com.golaxy.machine.mapper.MenuMapper;
 import com.golaxy.machine.mapper.RoleMapper;
 import com.golaxy.machine.service.RoleService;
 import com.golaxy.machine.util.JsonResult;
+import com.golaxy.machine.util.TreeUtils;
 import com.golaxy.machine.util.UtilsApi;
 import com.golaxy.machine.util.pagehelper.PageResult;
 import com.golaxy.machine.util.pagehelper.PageUtil;
@@ -31,6 +34,8 @@ public class RoleServiceImpl implements RoleService {
     private final static Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private MenuMapper menuMapper;
 
 
     /**
@@ -236,7 +241,7 @@ public class RoleServiceImpl implements RoleService {
             }};
             roleMapper.insertRoleMenu(maps);
         });
-        return new JsonResult<>(JsonResult.SUCCESS, "分配角色菜单成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "分配角色菜单成功", menuList.size());
     }
 
 
@@ -263,21 +268,40 @@ public class RoleServiceImpl implements RoleService {
         //将菜单和按钮分开摘取出来，封装返回结果
         List<MenuInfo> menuInfos = new ArrayList<>();
         List<String> operators = new ArrayList<>();
+        List<String> menuids = new ArrayList<>();
         menuInfoList.forEach(menuInfo -> {
             String menuType = menuInfo.getMenutype();
             //这里是前端展示的菜单
             if (ResultContants.MENU_TYPE_CD.equals(menuType)) {
                 menuInfos.add(menuInfo);
+                menuids.add(menuInfo.getId());
             }
             //这里是按钮，具体到每个页面中按钮级别
             if (ResultContants.MENU_TYPE_AN.equals(menuType)) {
                 operators.add(menuInfo.getMenucode());
             }
         });
+        //按照查询出角色对应菜单集合，查询出该用户能访问的菜单集合
+        List<MenuInfoChild> menuInfoChildList = menuMapper.findListByIds(menuids);
+        //开始将菜单整理成树结构,返回结果result集合
+        List<MenuInfoChild> result = new ArrayList<>();
+        result.addAll(menuInfoChildList);
+        //遍历上下级关系，组织为树结构
+        for (MenuInfoChild menuInfoChild : result) {
+            TreeUtils.setMenuChildren(menuInfoChildList, menuInfoChild);
+        }
+        //没有下级的去掉
+        List<MenuInfoChild> removeList = new ArrayList<>();
+        for (MenuInfoChild menuInfoChild : result) {
+            if (menuInfoChild.getChildren().size() == 0) {
+                removeList.add(menuInfoChild);
+            }
+        }
+        result.removeAll(removeList);
         Map<String, Object> resultMap = new HashMap<String, Object>() {{
-            put("menuInfos", menuInfos);
+            put("menuInfos", result);
             put("operators", operators);
         }};
-        return new JsonResult<>(JsonResult.SUCCESS, "获取角色菜单成功");
+        return new JsonResult<>(JsonResult.SUCCESS, "获取角色菜单成功", resultMap);
     }
 }

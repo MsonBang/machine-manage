@@ -200,9 +200,6 @@ public class MenuServiceImpl implements MenuService {
      **/
     @Override
     public JsonResult<List<MenuInfoChild>> findMenuList(Map<String, Object> map) {
-        if (!map.containsKey("parentid")) {
-            map.put("parentid", "");
-        }
         //查询所有的菜单
         List<MenuInfoChild> list = menuMapper.findList(map);
         //返回结果result集合
