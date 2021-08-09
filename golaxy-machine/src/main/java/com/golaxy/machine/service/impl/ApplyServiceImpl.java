@@ -6,6 +6,7 @@ import com.golaxy.machine.common.entity.ServerApplyInfo;
 import com.golaxy.machine.mapper.ApplyMapper;
 import com.golaxy.machine.service.ApplyService;
 import com.golaxy.machine.util.JsonResult;
+import com.golaxy.machine.util.MailUtil;
 import com.golaxy.machine.util.UtilsApi;
 import com.golaxy.machine.util.pagehelper.PageResult;
 import com.golaxy.machine.util.pagehelper.PageUtil;
@@ -31,6 +32,8 @@ public class ApplyServiceImpl implements ApplyService {
     private final static Logger logger = LoggerFactory.getLogger(ApplyServiceImpl.class);
     @Autowired
     private ApplyMapper applyMapper;
+    @Autowired
+    private MailUtil mailUtil;
 
     /**
      * @Description: 查询申请服务器记录实现方法
@@ -209,6 +212,8 @@ public class ApplyServiceImpl implements ApplyService {
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "审核失败");
         }
+        //给申请人发送结果邮件
+        mailUtil.makeSendUserParam(map);
         return new JsonResult<>(JsonResult.SUCCESS, "审核成功");
     }
 
@@ -262,6 +267,8 @@ public class ApplyServiceImpl implements ApplyService {
         if (i <= 0) {
             return new JsonResult<>(JsonResult.FAIL, "提交审核失败");
         }
+        //提交审核之后发送邮件给管理员
+        //mailUtil.makeSendAdminParam(map);
         return new JsonResult<>(JsonResult.SUCCESS, "提交审核成功", i);
     }
 

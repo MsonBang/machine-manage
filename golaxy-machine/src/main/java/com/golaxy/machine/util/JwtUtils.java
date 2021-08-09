@@ -52,17 +52,13 @@ public class JwtUtils {
      * @Author: miaoxuebing
      * @Date: 2021/7/16 下午2:02
      **/
-    public static String analysisJwtToken(String token) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(getValueByKey("config", "token_secret"));
-            JWTVerifier verifier = JWT.require(algorithm).build();
-            DecodedJWT jwt = verifier.verify(token);
-            String userId = jwt.getClaim("uId").asString();
-            return userId;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static String analysisJwtToken(String token) throws UnsupportedEncodingException {
+        Algorithm algorithm = Algorithm.HMAC256(getValueByKey("config", "token_secret"));
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT jwt = verifier.verify(token);
+        String userId = jwt.getClaim("uId").asString();
+        return userId;
+
     }
 
     /**

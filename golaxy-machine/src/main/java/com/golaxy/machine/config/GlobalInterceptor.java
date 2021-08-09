@@ -13,6 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 /**
@@ -28,7 +29,7 @@ public class GlobalInterceptor implements HandlerInterceptor {
     private final static Logger log = LoggerFactory.getLogger(GlobalInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler){
         //获取请求路径
         //String basePath = request.getScheme() + "://" + request.getServerName()+":" + request.getServerPort() + request.getContextPath() + "/";
         String basePath = request.getRequestURI();
@@ -41,12 +42,15 @@ public class GlobalInterceptor implements HandlerInterceptor {
             return false;
         }
         //如果token不为空，需要Jwt解析token校验
-        String userId = JwtUtils.analysisJwtToken(accessToken);
-        if(UtilsApi.isNull(userId)){
-            setResponse(response, false,"请求token异常，请检查！");
-            return false;
+        try {
+            String userId = JwtUtils.analysisJwtToken(accessToken);
+            if(UtilsApi.isNull(userId)){
+                setResponse(response, false,"请求token异常，请检查！");
+                return false;
+            }
+        } catch (UnsupportedEncodingException e) {
+            setResponse(response,false,"登陆失效，请重新登录！");
         }
-
         return true;
     }
 

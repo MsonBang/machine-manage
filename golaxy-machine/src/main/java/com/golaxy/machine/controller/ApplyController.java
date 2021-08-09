@@ -132,8 +132,12 @@ public class ApplyController {
     @ApiOperation(value = "审核申请服务器记录接口", notes = "审核申请服务器记录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "id", value = "申请主键id", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "servername", value = "服务器名称", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "serverip", value = "服务器ip", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "applyuser", value = "申请人姓名", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
             @ApiImplicitParam(paramType = "query", name = "checkuser", value = "审核人", dataType = "String"),
-            @ApiImplicitParam(paramType = "query", name = "checkstatus", value = "审核状态[0通过未通过]", dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "checkstatus", value = "审核状态[0通过未通过]", dataType = "int"),
             @ApiImplicitParam(paramType = "query", name = "checkremark", value = "审核意见备注", dataType = "String"),
     })
     public JsonResult<Integer> checkApply(@RequestBody Map<String, Object> map) {
@@ -176,16 +180,22 @@ public class ApplyController {
     * @Date: 2021/8/3 下午2:25
     **/
     @PostMapping("/submit")
-    @ApiOperation(value = "撤销申请服务器记录接口", notes = "撤销申请服务器记录接口")
+    @ApiOperation(value = "提交申请服务器记录接口", notes = "提交申请服务器记录接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "id", value = "申请主键id", dataType = "string")
+            @ApiImplicitParam(paramType = "query", name = "id", value = "申请主键id", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "servername", value = "服务器名称", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "serverip", value = "服务器ip", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "applyuser", value = "申请人姓名", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "applyorg", value = "申请人所在部门", dataType = "string"),
+            @ApiImplicitParam(paramType = "query", name = "email", value = "邮箱", dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "applyremark", value = "申请用途描述[主要描述服务于那个项目、大概描述]", dataType = "String")
     })
     public JsonResult<Integer> submitApply(@RequestBody Map<String, Object> map) {
         try {
             return applyService.submitApply(map);
         } catch (Exception e) {
-            logger.error("撤销异常！请联系管理员", e);
-            return new JsonResult<>(JsonResult.FAIL, "撤销异常！请联系管理员");
+            logger.error("提交异常！请联系管理员", e);
+            return new JsonResult<>(JsonResult.FAIL, "提交异常！请联系管理员");
         }
     }
 
